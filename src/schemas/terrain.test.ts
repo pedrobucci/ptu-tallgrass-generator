@@ -9,12 +9,22 @@ const valid = {
     max_lvl: 10,
     encounter_frequency: "normal",
     shiny_rate: null,
-    pokemon_table: [{ number: 1, rarity: "common", gender: true, male_odd: null, min_lvl: null, max_lvl: null }],
+    pokemon_table: [
+      { number: 1, rarity: "common", gender: true, male_odd: null, min_lvl: null, max_lvl: null },
+      { number: 4, rarity: "unusual", gender: true, male_odd: null, min_lvl: null, max_lvl: null },
+    ],
   },
 };
 
 describe("schema de terreno", () => {
-  it("aceita o formato canônico", () => expect(terrainFileSchema.safeParse(valid).success).toBe(true));
+  it("aceita shiny_rate null e vários Pokémon", () => {
+    const result = terrainFileSchema.safeParse(valid);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.terrain.shiny_rate).toBeNull();
+      expect(result.data.terrain.pokemon_table).toHaveLength(2);
+    }
+  });
   it.each([
     ["versão", { ...valid, schema_version: "2.0" }],
     ["enum", { ...valid, terrain: { ...valid.terrain, encounter_frequency: "sometimes" } }],
@@ -23,4 +33,3 @@ describe("schema de terreno", () => {
     ["duplicata", { ...valid, terrain: { ...valid.terrain, pokemon_table: [...valid.terrain.pokemon_table, ...valid.terrain.pokemon_table] } }],
   ])("rejeita %s inválido", (_, value) => expect(terrainFileSchema.safeParse(value).success).toBe(false));
 });
-

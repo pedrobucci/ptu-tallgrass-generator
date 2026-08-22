@@ -137,9 +137,9 @@
       <p class="eyebrow">Manual para iniciantes</p>
       <h1>Guia do Usuário<br />PTU Encounter Generator</h1>
       <p class="subtitle">Como importar terrenos, gerar encontros, configurar música e criar seus próprios arquivos JSON — sem precisar saber programar.</p>
-      <span class="cover-badge">Windows + Android · versão 0.1.1</span>
+      <span class="cover-badge">Windows + Android · versão 0.1.2</span>
     </div>
-    <div class="cover-meta"><span>Distribuição privada/local</span><span>Agosto de 2026</span></div>
+    <div class="cover-meta"><span>Projeto público e não oficial</span><span>Agosto de 2026</span></div>
   </section>
 
   <section class="page">
@@ -431,7 +431,7 @@
   }
 }</pre>
     <div class="grid-2">
-      <div class="card"><h3>Para adicionar um Pokémon</h3><p>Copie um bloco inteiro entre <code>{ }</code>, cole antes do fechamento da lista e troque número, raridade e níveis. Lembre-se da vírgula entre os blocos.</p></div>
+      <div class="card"><h3>Para adicionar um Pokémon</h3><p>Os colchetes <code>[ ]</code> delimitam a lista. Copie um bloco inteiro entre <code>{ }</code>, cole antes do colchete final e use vírgula entre os blocos.</p></div>
       <div class="card gold"><h3>Para criar outra rota</h3><p>Troque o nome, os níveis gerais e toda a lista <code>pokemon_table</code>. Mantenha <code>schema_version</code> como <code>"1.0"</code>.</p></div>
     </div>
     <div class="footer"><span>Exemplo completo de terreno</span><span>9</span></div>
@@ -464,21 +464,20 @@
       <div class="card green"><strong>Use inglês</strong><p>O JSON exige os textos da esquerda.</p></div>
     </div>
 
-    <div class="callout" style="margin-top:5mm"><strong>Percentuais no JSON:</strong> 50% é escrito como <code>0.5</code>. A chance de 1 em 4.096 é <code>0.000244140625</code>. Não escreva <code>50</code> em <code>shiny_rate</code>, pois o limite é 1.</div>
+    <div class="callout" style="margin-top:5mm"><strong>Taxa global:</strong> escreva <code>"shiny_rate": null</code>, sem aspas em <code>null</code>. Para uma taxa própria, use um decimal entre 0 e 1; por exemplo, 1 em 4.096 é <code>0.000244140625</code>.</div>
     <div class="footer"><span>Referência dos campos do terreno</span><span>10</span></div>
   </section>
 
   <section class="page">
     <p class="eyebrow">9 · Campos dos Pokémon</p>
     <h2>Montando a <code>pokemon_table</code></h2>
-    <pre class="code-block">{
-  <span class="key">"number"</span>: 25,
-  <span class="key">"rarity"</span>: <span class="value">"rare"</span>,
-  <span class="key">"gender"</span>: true,
-  <span class="key">"male_odd"</span>: 50,
-  <span class="key">"min_lvl"</span>: 4,
-  <span class="key">"max_lvl"</span>: 7
-}</pre>
+    <pre class="code-block"><span class="key">"pokemon_table"</span>: [
+  { <span class="key">"number"</span>: 25, <span class="key">"rarity"</span>: <span class="value">"rare"</span>, <span class="key">"gender"</span>: true,
+    <span class="key">"male_odd"</span>: 50, <span class="key">"min_lvl"</span>: 4, <span class="key">"max_lvl"</span>: 7 },
+  { <span class="key">"number"</span>: 16, <span class="key">"rarity"</span>: <span class="value">"common"</span>, <span class="key">"gender"</span>: true,
+    <span class="key">"male_odd"</span>: null, <span class="key">"min_lvl"</span>: null, <span class="key">"max_lvl"</span>: null }
+]</pre>
+    <p class="small">Cada par de chaves <code>{ }</code> é um Pokémon; os colchetes <code>[ ]</code> mantêm todos eles na mesma lista.</p>
     <table>
       <thead><tr><th>Campo</th><th>Exemplo</th><th>O que controla</th></tr></thead>
       <tbody>
@@ -562,7 +561,7 @@
       </div>
     </div>
 
-    <h3 style="margin-top:5mm">Modelo mínimo para copiar</h3>
+    <h3 style="margin-top:5mm">Modelo com dois Pokémon para copiar</h3>
     <pre class="code-block">{
   <span class="key">"schema_version"</span>: <span class="value">"1.0"</span>,
   <span class="key">"terrain"</span>: {
@@ -575,6 +574,14 @@
       {
         <span class="key">"number"</span>: 16,
         <span class="key">"rarity"</span>: <span class="value">"common"</span>,
+        <span class="key">"gender"</span>: true,
+        <span class="key">"male_odd"</span>: null,
+        <span class="key">"min_lvl"</span>: null,
+        <span class="key">"max_lvl"</span>: null
+      },
+      {
+        <span class="key">"number"</span>: 19,
+        <span class="key">"rarity"</span>: <span class="value">"unusual"</span>,
         <span class="key">"gender"</span>: true,
         <span class="key">"male_odd"</span>: null,
         <span class="key">"min_lvl"</span>: null,
@@ -641,7 +648,7 @@
     </div>
 
     <h3 style="margin-top:6mm">Segurança no Android</h3>
-    <p>O APK é distribuído de forma privada e não vem da Play Store. Durante a instalação pode ser necessário desativar temporariamente o Bloqueador Automático e permitir instalação pelo Telegram ou navegador. Depois de instalar:</p>
+    <p>O APK é publicado no GitHub e não vem da Play Store. Durante a instalação pode ser necessário desativar temporariamente o Bloqueador Automático e permitir instalação pelo navegador ou aplicativo usado para baixar o arquivo. Depois de instalar:</p>
     <ul>
       <li>reative o <strong>Bloqueador Automático</strong>;</li>
       <li>desative <strong>Depuração USB/sem fio</strong> se não estiver usando;</li>
@@ -674,7 +681,7 @@
     </ul>
 
     <h3 style="margin-top:6mm">Sobre o projeto</h3>
-    <p>Este aplicativo é uma ferramenta independente para uso privado/local de um grupo de RPG. Não contém ROMs, músicas extraídas de jogos ou imagens copiadas dos jogos.</p>
+    <p>Este aplicativo é uma ferramenta independente, gratuita e de código aberto para grupos de RPG. Não contém ROMs, músicas extraídas de jogos ou imagens copiadas dos jogos.</p>
     <p>Pokémon e nomes relacionados pertencem aos respectivos titulares. O projeto não é afiliado, patrocinado ou aprovado pela Nintendo, Creatures Inc. ou The Pokémon Company.</p>
 
     <div class="card gold" style="margin-top:7mm">
