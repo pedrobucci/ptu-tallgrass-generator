@@ -1,0 +1,154 @@
+{
+  "$id": "https://ptu-encounter-generator.local/schemas/terrain/1.0",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "background_image_url": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "terrain": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "min_lvl": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "max_lvl": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "encounter_frequency": {
+          "type": "string",
+          "enum": [
+            "uneventful",
+            "rare",
+            "normal",
+            "frequent",
+            "eventful"
+          ]
+        },
+        "shiny_rate": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pokemon_table": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "number": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "rarity": {
+                "type": "string",
+                "enum": [
+                  "common",
+                  "unusual",
+                  "rare",
+                  "super_rare",
+                  "legendary"
+                ]
+              },
+              "gender": {
+                "type": "boolean"
+              },
+              "male_odd": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "min_lvl": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "max_lvl": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "number",
+              "rarity",
+              "gender"
+            ]
+          }
+        }
+      },
+      "required": [
+        "name",
+        "encounter_frequency",
+        "pokemon_table"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "terrain"
+  ]
+}

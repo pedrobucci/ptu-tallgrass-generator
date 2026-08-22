@@ -1,0 +1,31 @@
+services:
+  quality:
+    image: node:24-bookworm
+    working_dir: /workspace
+    command: ["sh", "-lc", "npm ci && npm run check"]
+    volumes:
+      - .:/workspace
+      - quality-node-modules:/workspace/node_modules
+
+  android:
+    build:
+      context: .
+      dockerfile: Dockerfile.android
+    working_dir: /workspace
+    command: ["bash", "scripts/build-android.sh"]
+    env_file:
+      - .env.android
+    volumes:
+      - .:/workspace
+      - android-node-modules:/workspace/node_modules
+      - android-cargo-registry:/usr/local/cargo/registry
+      - android-cargo-git:/usr/local/cargo/git
+      - android-rust-target:/workspace/src-tauri/target
+      - ./keystores/android-release.jks:/run/secrets/android-release.jks:ro
+
+volumes:
+  quality-node-modules:
+  android-node-modules:
+  android-cargo-registry:
+  android-cargo-git:
+  android-rust-target:

@@ -1,0 +1,39 @@
+{
+  "name": "ptu-encounter-generator",
+  "private": true,
+  "version": "0.1.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "npm run schema:check && npm test && npm run build",
+    "schema:generate": "tsx scripts/generate-terrain-schema.ts",
+    "schema:check": "tsx scripts/generate-terrain-schema.ts --check",
+    "catalog:sync": "node scripts/sync-pokemon-catalog.mjs",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-dialog": "^2",
+    "@tauri-apps/plugin-fs": "^2",
+    "@tauri-apps/plugin-http": "^2",
+    "@tauri-apps/plugin-log": "^2",
+    "@tauri-apps/plugin-sql": "^2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "zod": "^4"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.6.0",
+    "tsx": "^4",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.4",
+    "vitest": "^3",
+    "@tauri-apps/cli": "^2"
+  }
+}

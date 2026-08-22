@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "terrain": {
+    "name": "Rota de Exemplo",
+    "min_lvl": 2,
+    "max_lvl": 8,
+    "encounter_frequency": "normal",
+    "shiny_rate": null,
+    "pokemon_table": [
+      { "number": 16, "rarity": "common", "gender": true, "male_odd": null, "min_lvl": null, "max_lvl": null },
+      { "number": 19, "rarity": "common", "gender": true, "male_odd": null, "min_lvl": null, "max_lvl": null },
+      { "number": 25, "rarity": "unusual", "gender": true, "male_odd": 50, "min_lvl": 4, "max_lvl": 7 },
+      { "number": 133, "rarity": "rare", "gender": true, "male_odd": 87.5, "min_lvl": 5, "max_lvl": 8 }
+    ]
+  }
+}

@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guia do Usuário — PTU Encounter Generator</title>
+  <style>
+    :root {
+      --ink: #092f2a;
+      --green: #18785e;
+      --green-2: #dceee7;
+      --mint: #edf6f1;
+      --gold: #e4ac29;
+      --paper: #fbfcf9;
+      --muted: #5d716b;
+      --line: #cadbd4;
+      --danger: #9e3e32;
+      --warning: #fff1c7;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: #d8dfdc; color: var(--ink); font-family: "Segoe UI", Arial, sans-serif; }
+    body { counter-reset: page; }
+    @page { size: A4; margin: 0; }
+
+    .page {
+      counter-increment: page;
+      width: 210mm;
+      height: 297mm;
+      padding: 15mm 16mm 14mm;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      background: var(--paper);
+      page-break-after: always;
+      break-after: page;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+    .page:last-child { page-break-after: auto; }
+    .footer {
+      position: absolute;
+      left: 16mm;
+      right: 16mm;
+      bottom: 6mm;
+      display: flex;
+      justify-content: space-between;
+      padding-top: 2mm;
+      border-top: .3mm solid var(--line);
+      color: var(--muted);
+      font-size: 8pt;
+    }
+
+    h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; margin: 0; line-height: 1.08; }
+    h1 { font-size: 30pt; }
+    h2 { font-size: 23pt; margin-bottom: 3mm; }
+    h3 { font-size: 15pt; margin-bottom: 1.5mm; }
+    p { font-size: 10.4pt; line-height: 1.46; margin: 0 0 3mm; }
+    ul, ol { margin: 2mm 0 3mm 5mm; padding-left: 4mm; }
+    li { font-size: 10pt; line-height: 1.42; margin-bottom: 1.5mm; }
+    code { font-family: Consolas, "Courier New", monospace; }
+    a { color: var(--green); }
+
+    .eyebrow { color: var(--green); font-size: 8.5pt; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    .lead { color: #2f4a44; font-size: 12pt; line-height: 1.48; }
+    .muted { color: var(--muted); }
+    .small { font-size: 8.5pt; }
+    .spacer { height: 3mm; }
+
+    .cover { padding: 0; background: #f7edc9; }
+    .cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,250,229,.98) 0%, rgba(255,250,229,.90) 24%, rgba(255,250,229,.12) 54%, rgba(4,35,31,.18) 100%); }
+    .cover-copy { position: relative; z-index: 1; padding: 18mm 17mm; width: 100%; }
+    .cover h1 { max-width: 160mm; font-size: 34pt; }
+    .cover .subtitle { width: 125mm; margin-top: 4mm; color: #294841; font-size: 14pt; }
+    .cover-badge { display: inline-block; margin-top: 6mm; padding: 2.2mm 4mm; border-radius: 99mm; background: var(--ink); color: white; font-weight: 700; font-size: 9pt; }
+    .cover-meta { position: absolute; z-index: 2; left: 17mm; right: 17mm; bottom: 10mm; display: flex; justify-content: space-between; color: white; font-size: 8.5pt; text-shadow: 0 1px 4px #000; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+    .card { padding: 4mm; border: .35mm solid var(--line); border-radius: 4mm; background: white; }
+    .card.green { background: var(--mint); border-color: #b8d7ca; }
+    .card.gold { background: #fff8df; border-color: #ecd58f; }
+    .card.danger { background: #fff3f0; border-color: #e7b6ae; }
+    .number { display: inline-grid; width: 7mm; height: 7mm; place-items: center; margin-right: 2mm; border-radius: 50%; background: var(--green); color: white; font-size: 9pt; font-weight: 800; }
+    .step { display: grid; grid-template-columns: 9mm 1fr; gap: 2mm; margin-bottom: 4mm; }
+    .step p { margin: .8mm 0 0; }
+
+    .flow { display: grid; grid-template-columns: repeat(5, 1fr); align-items: center; gap: 2mm; margin: 5mm 0; }
+    .flow div { padding: 4mm 2mm; min-height: 23mm; display: grid; place-items: center; text-align: center; border-radius: 3mm; background: var(--green-2); font-size: 9pt; font-weight: 750; }
+    .flow span { color: var(--green); text-align: center; font-size: 15pt; }
+
+    .shot { position: relative; width: 100%; margin: 3mm 0 2mm; border: .4mm solid var(--line); border-radius: 3mm; overflow: hidden; background: white; box-shadow: 0 2mm 6mm rgba(9,47,42,.10); }
+    .shot img { display: block; width: 100%; height: auto; }
+    .shot.mobile { width: 58mm; margin: 0 auto; }
+    .pin { position: absolute; width: 7.5mm; height: 7.5mm; display: grid; place-items: center; border: .7mm solid white; border-radius: 50%; background: #d88d13; color: white; font-size: 10pt; font-weight: 900; box-shadow: 0 1mm 3mm rgba(0,0,0,.28); }
+    figcaption { color: var(--muted); font-size: 8.4pt; line-height: 1.35; }
+
+    .legend { display: flex; flex-wrap: wrap; gap: 2mm 5mm; margin: 2mm 0 4mm; }
+    .legend span { display: inline-flex; align-items: center; font-size: 8.8pt; }
+    .legend b { display: inline-grid; place-items: center; width: 5.5mm; height: 5.5mm; margin-right: 1.4mm; border-radius: 50%; background: #d88d13; color: white; font-size: 7.5pt; }
+
+    .code-block { margin: 3mm 0; padding: 4mm; border-radius: 3mm; background: #082f2b; color: #e7f5ed; font: 7.6pt/1.42 Consolas, "Courier New", monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .code-inline { padding: .4mm 1.2mm; border-radius: 1mm; background: #e7f0ec; color: #154e40; font-size: 9pt; }
+    .comment { color: #92c8b3; }
+    .key { color: #f4cb67; }
+    .value { color: #b8e7d2; }
+
+    table { width: 100%; border-collapse: collapse; margin: 3mm 0; font-size: 8.5pt; }
+    th, td { padding: 2.2mm 2.3mm; border-bottom: .3mm solid var(--line); vertical-align: top; line-height: 1.35; }
+    th { color: white; background: var(--ink); text-align: left; font-size: 8.2pt; }
+    tbody tr:nth-child(even) { background: #edf4f0; }
+    .compact td, .compact th { padding: 1.5mm 2mm; }
+
+    .tree { padding: 5mm; border-radius: 4mm; background: var(--ink); color: white; font-family: Consolas, monospace; font-size: 10pt; line-height: 1.7; }
+    .tree .folder { color: #ffd773; font-weight: 700; }
+    .tree .leaf { color: #bde5d4; }
+    .tree .hint { color: #93afa8; }
+
+    .callout { padding: 3.5mm 4mm; border-left: 1.5mm solid var(--gold); border-radius: 0 3mm 3mm 0; background: var(--warning); font-size: 9.4pt; line-height: 1.4; }
+    .callout strong { color: #6d4a00; }
+    .error-list { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; }
+    .error-item { padding: 3mm; border-radius: 3mm; border: .35mm solid #e3c3bd; background: #fff7f4; }
+    .error-item code { display: block; color: var(--danger); font-size: 8.4pt; font-weight: 700; margin-bottom: 1mm; }
+    .error-item p { font-size: 8.7pt; margin: 0; }
+
+    .checklist { list-style: none; margin-left: 0; padding: 0; }
+    .checklist li { position: relative; padding-left: 8mm; margin-bottom: 3mm; }
+    .checklist li::before { content: "□"; position: absolute; left: 0; top: -1mm; color: var(--green); font-size: 16pt; }
+    .source-list a { overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+  <section class="page cover">
+    <img src="images/guide-cover.png" alt="Ilustração de um computador e um celular exibindo encontros de criaturas em uma mesa de RPG" />
+    <div class="cover-copy">
+      <p class="eyebrow">Manual para iniciantes</p>
+      <h1>Guia do Usuário<br />PTU Encounter Generator</h1>
+      <p class="subtitle">Como importar terrenos, gerar encontros, configurar música e criar seus próprios arquivos JSON — sem precisar saber programar.</p>
+      <span class="cover-badge">Windows + Android · versão 0.1.1</span>
+    </div>
+    <div class="cover-meta"><span>Distribuição privada/local</span><span>Agosto de 2026</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">Comece por aqui</p>
+    <h2>O que o programa faz?</h2>
+    <p class="lead">O PTU Encounter Generator sorteia encontros para sessões de Pokémon Tabletop United. Você informa o terreno e a distância percorrida; o programa decide se houve encontro e, quando houver, sorteia Pokémon, nível, sexo, Nature e Shiny.</p>
+
+    <div class="flow">
+      <div>1. Criar ou receber um JSON</div><span>→</span>
+      <div>2. Importar o terreno</div><span>→</span>
+      <div>3. Informar a distância</div><span>→</span>
+      <div>4. Percorrer</div><span>→</span>
+      <div>5. Ver o encontro</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card green">
+        <h3>Primeiro teste recomendado</h3>
+        <ol>
+          <li>Envie para o aparelho o arquivo <code>pokemon-yellow-route-1.json</code>.</li>
+          <li>Importe-o na tela <strong>Terrenos</strong>.</li>
+          <li>Abra <strong>Percorrer</strong>, informe 5 km e toque em <strong>PERCORRER</strong>.</li>
+          <li>Repita se nenhum encontro ocorrer — isso é normal e faz parte do sorteio.</li>
+        </ol>
+      </div>
+      <div class="card gold">
+        <h3>Três ideias importantes</h3>
+        <ul>
+          <li>O programa funciona offline para gerar encontros.</li>
+          <li>Cada terreno é um arquivo de texto no formato JSON.</li>
+          <li>As raridades são pesos relativos; elas não precisam somar 100.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="margin-top:6mm">Sumário</h3>
+    <div class="grid-2">
+      <ol>
+        <li>Conhecendo a interface</li>
+        <li>Importando um terreno</li>
+        <li>Gerando um encontro</li>
+        <li>Adicionando música</li>
+        <li>Histórico e ajustes</li>
+      </ol>
+      <ol start="6">
+        <li>Entendendo o JSON</li>
+        <li>Exemplo completo</li>
+        <li>Campos do terreno e dos Pokémon</li>
+        <li>Probabilidades e raridades</li>
+        <li>Erros comuns e checklist</li>
+      </ol>
+    </div>
+    <div class="callout" style="margin-top:4mm"><strong>Não tenha medo do JSON.</strong> Ele é apenas uma lista organizada de informações. Este guia mostra exatamente o que pode ser alterado e o que deve permanecer igual.</div>
+    <div class="footer"><span>PTU Encounter Generator · Guia para iniciantes</span><span>2</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">1 · Interface</p>
+    <h2>As cinco áreas do programa</h2>
+    <div class="grid-2" style="grid-template-columns:1.45fr .55fr; align-items:start">
+      <div>
+        <figure class="shot"><img src="images/ui-home-desktop.png" alt="Tela inicial do aplicativo no computador" /></figure>
+        <figcaption>No computador, o menu fica à esquerda. A tela inicial mostra o terreno ativo e o último encontro.</figcaption>
+      </div>
+      <div>
+        <figure class="shot mobile"><img src="images/ui-home-mobile.png" alt="Tela inicial do aplicativo no celular" /></figure>
+        <figcaption>No celular, o mesmo menu fica na barra inferior.</figcaption>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-top:5mm">
+      <div class="card"><h3>Início</h3><p>Resumo rápido e atalhos.</p></div>
+      <div class="card"><h3>Percorrer</h3><p>Realiza o sorteio do encontro.</p></div>
+      <div class="card"><h3>Terrenos</h3><p>Importa, valida e exclui JSONs.</p></div>
+      <div class="card"><h3>Histórico</h3><p>Guarda encontros já gerados.</p></div>
+      <div class="card"><h3>Ajustes</h3><p>Probabilidades, Shiny e áudio.</p></div>
+      <div class="card green"><h3>Dica</h3><p>Comece sempre por <strong>Terrenos</strong>.</p></div>
+    </div>
+    <div class="footer"><span>Conhecendo a interface</span><span>3</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">2 · Terrenos</p>
+    <h2>Como importar um JSON</h2>
+    <figure class="shot">
+      <img src="images/ui-terrains-desktop.png" alt="Tela Terrenos sem nenhum arquivo importado" />
+      <span class="pin" style="left:87%;top:10%">1</span>
+      <span class="pin" style="left:60%;top:54%">2</span>
+    </figure>
+    <div class="legend"><span><b>1</b>Importar JSON no alto</span><span><b>2</b>Escolher arquivo quando a lista está vazia</span></div>
+
+    <div class="grid-2">
+      <div>
+        <div class="step"><span class="number">1</span><div><h3>Abra Terrenos</h3><p>Toque no menu <strong>Terrenos</strong>.</p></div></div>
+        <div class="step"><span class="number">2</span><div><h3>Escolha o arquivo</h3><p>Toque em <strong>Importar JSON</strong> e selecione um arquivo terminado em <code>.json</code>.</p></div></div>
+        <div class="step"><span class="number">3</span><div><h3>Leia a prévia</h3><p>O programa mostra nome, quantidade de Pokémon, avisos e erros.</p></div></div>
+      </div>
+      <div>
+        <div class="step"><span class="number">4</span><div><h3>Confirme</h3><p>Se não houver erros, toque em <strong>Confirmar importação</strong>.</p></div></div>
+        <div class="step"><span class="number">5</span><div><h3>Selecione o terreno</h3><p>O terreno importado passa a ser o terreno ativo.</p></div></div>
+        <div class="step"><span class="number">6</span><div><h3>Substitua quando necessário</h3><p>Importar outro JSON com o mesmo nome oferece a opção de substituir o anterior.</p></div></div>
+      </div>
+    </div>
+    <div class="callout"><strong>Aviso não é erro.</strong> Um terreno simples pode avisar que não possui Pokémon raros ou lendários. Você ainda pode importá-lo. Erros em vermelho precisam ser corrigidos.</div>
+    <div class="footer"><span>Importando um terreno</span><span>4</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">3 · Encontros</p>
+    <h2>Como percorrer um terreno</h2>
+    <figure class="shot">
+      <img src="images/ui-encounter-desktop.png" alt="Formulário para percorrer terreno" />
+      <span class="pin" style="left:52%;top:31%">1</span>
+      <span class="pin" style="left:47%;top:44%">2</span>
+      <span class="pin" style="left:30%;top:52%">3</span>
+      <span class="pin" style="left:58%;top:72%">4</span>
+    </figure>
+    <div class="legend">
+      <span><b>1</b>Terreno</span><span><b>2</b>Distância e unidade</span><span><b>3</b>Permitir Shiny</span><span><b>4</b>Sortear</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Passo a passo</h3>
+        <ol>
+          <li>Escolha o terreno.</li>
+          <li>Digite a distância percorrida.</li>
+          <li>Escolha metros ou quilômetros.</li>
+          <li>Decida se Shiny está permitido.</li>
+          <li>Confira a <strong>chance estimada</strong>.</li>
+          <li>Toque em <strong>PERCORRER</strong>.</li>
+        </ol>
+      </div>
+      <div class="card green">
+        <h3>O resultado pode ser…</h3>
+        <p><strong>Nenhum encontro:</strong> o sorteio não passou na chance calculada. Tente outro percurso.</p>
+        <p><strong>Um encontro:</strong> aparece uma ficha com espécie, nível, sexo, raridade, Nature e possível Shiny.</p>
+        <p><strong>Importante:</strong> cada percurso gera no máximo um encontro.</p>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:4mm"><strong>Para testar rapidamente:</strong> use uma distância maior, como 5 km. A distância aumenta a chance acumulada, mas não muda quais Pokémon existem no terreno.</div>
+    <div class="footer"><span>Gerando um encontro</span><span>5</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">4 · Áudio</p>
+    <h2>Como adicionar uma música MP3</h2>
+    <figure class="shot">
+      <img src="images/ui-settings-audio-desktop.png" alt="Seção de áudio nas configurações" />
+      <span class="pin" style="left:69%;top:73%">1</span>
+      <span class="pin" style="left:64%;top:54%">2</span>
+      <span class="pin" style="left:88%;top:61%">3</span>
+    </figure>
+    <div class="legend"><span><b>1</b>Selecionar MP3</span><span><b>2</b>Ligar ou desligar</span><span><b>3</b>Volume</span></div>
+
+    <div class="grid-2">
+      <div>
+        <div class="step"><span class="number">1</span><div><h3>Transfira o MP3</h3><p>No Android, baixe pelo Telegram ou salve em Downloads.</p></div></div>
+        <div class="step"><span class="number">2</span><div><h3>Abra Ajustes</h3><p>Role até a seção <strong>Áudio</strong>.</p></div></div>
+        <div class="step"><span class="number">3</span><div><h3>Selecione</h3><p>Toque em <strong>Selecionar MP3</strong> e escolha o arquivo.</p></div></div>
+      </div>
+      <div>
+        <div class="step"><span class="number">4</span><div><h3>Teste</h3><p>Depois de armazenado, use o botão <strong>Testar</strong>.</p></div></div>
+        <div class="step"><span class="number">5</span><div><h3>Ajuste</h3><p>Defina o volume e deixe <strong>Reproduzir em encontros</strong> marcado.</p></div></div>
+        <div class="step"><span class="number">6</span><div><h3>Salve</h3><p>Toque em <strong>Salvar alterações</strong> após mudar volume ou preferências.</p></div></div>
+      </div>
+    </div>
+    <div class="callout"><strong>Privacidade:</strong> o programa copia o MP3 escolhido para sua pasta interna. O arquivo original pode continuar em Downloads ou no Telegram. Use somente áudio que você tenha permissão para utilizar.</div>
+    <div class="footer"><span>Configurando música</span><span>6</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">5 · Histórico e ajustes</p>
+    <h2>O que fica salvo?</h2>
+    <div class="grid-2">
+      <div class="card green">
+        <h3>Histórico</h3>
+        <p>Cada encontro bem-sucedido é armazenado com data, terreno, Pokémon, nível, Nature, chance e indicação de Shiny.</p>
+        <p>Excluir um terreno não apaga os encontros antigos que já foram registrados.</p>
+      </div>
+      <div class="card">
+        <h3>Dados locais</h3>
+        <p>Terrenos, configurações, histórico, música e imagens em cache ficam no dispositivo. Não é necessário criar conta.</p>
+        <p>Desinstalar o aplicativo pode apagar esses dados.</p>
+      </div>
+    </div>
+
+    <figure class="shot" style="margin-top:5mm"><img src="images/ui-settings-desktop.png" alt="Configurações de probabilidade e raridade" /></figure>
+    <div class="grid-2">
+      <div>
+        <h3>Probabilidade de encontro</h3>
+        <p>Cada frequência possui uma chance base por intervalo. Nos valores iniciais:</p>
+        <table class="compact"><thead><tr><th>JSON</th><th>Na tela</th><th>Chance</th></tr></thead><tbody>
+          <tr><td><code>uneventful</code></td><td>Tranquila</td><td>5%</td></tr>
+          <tr><td><code>rare</code></td><td>Rara</td><td>15%</td></tr>
+          <tr><td><code>normal</code></td><td>Normal</td><td>30%</td></tr>
+          <tr><td><code>frequent</code></td><td>Frequente</td><td>50%</td></tr>
+          <tr><td><code>eventful</code></td><td>Agitada</td><td>75%</td></tr>
+        </tbody></table>
+      </div>
+      <div>
+        <h3>Botões de manutenção</h3>
+        <ul>
+          <li><strong>Limpar cache:</strong> remove imagens baixadas; não apaga terrenos.</li>
+          <li><strong>Exportar:</strong> salva uma cópia das configurações.</li>
+          <li><strong>Restaurar padrões:</strong> volta probabilidades e preferências aos valores iniciais.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer"><span>Histórico e configurações</span><span>7</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">6 · JSON sem mistério</p>
+    <h2>Como o arquivo é organizado</h2>
+    <p class="lead">JSON é texto com nomes e valores. Chaves <code>{ }</code> formam blocos; colchetes <code>[ ]</code> formam listas; textos usam aspas duplas.</p>
+
+    <div class="tree">
+      <span class="folder">arquivo.json</span><br />
+      ├── <span class="leaf">schema_version</span> <span class="hint">→ versão do formato</span><br />
+      ├── <span class="leaf">background_image_url</span> <span class="hint">→ opcional</span><br />
+      └── <span class="folder">terrain</span> <span class="hint">→ dados do terreno</span><br />
+      &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="leaf">name</span><br />
+      &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="leaf">min_lvl / max_lvl</span><br />
+      &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="leaf">encounter_frequency</span><br />
+      &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="leaf">shiny_rate</span><br />
+      &nbsp;&nbsp;&nbsp;&nbsp;└── <span class="folder">pokemon_table [ ]</span><br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="leaf">Pokémon 1 { }</span><br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="leaf">Pokémon 2 { }</span><br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="leaf">outros…</span>
+    </div>
+
+    <div class="grid-2" style="margin-top:5mm">
+      <div class="card gold">
+        <h3>Regras de escrita</h3>
+        <ul>
+          <li>Use aspas duplas: <code>"name"</code>.</li>
+          <li>Separe campos com vírgula.</li>
+          <li>Não coloque vírgula depois do último campo.</li>
+          <li>Use ponto em decimais: <code>0.5</code>, nunca <code>0,5</code>.</li>
+          <li><code>true</code>, <code>false</code> e <code>null</code> não usam aspas.</li>
+        </ul>
+      </div>
+      <div class="card green">
+        <h3>Como salvar</h3>
+        <ol>
+          <li>Abra um editor de texto simples.</li>
+          <li>Cole um modelo válido.</li>
+          <li>Altere somente os valores necessários.</li>
+          <li>Salve em UTF-8 com extensão <code>.json</code>.</li>
+          <li>Importe e leia a prévia antes de confirmar.</li>
+        </ol>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:5mm"><strong>No Windows:</strong> ao usar o Bloco de Notas, escolha “Todos os arquivos” e escreva o nome completo, por exemplo <code>floresta-viridiana.json</code>. Isso evita salvar acidentalmente como <code>.json.txt</code>.</div>
+    <div class="footer"><span>Entendendo a estrutura JSON</span><span>8</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">7 · Modelo pronto</p>
+    <h2>Exemplo: Rota 1 de Pokémon Yellow</h2>
+    <p>Pidgey aparece nos níveis 2–7 e Rattata nos níveis 2–4. As categorias <code>common</code> e <code>unusual</code> aproximam a proporção original de 70% e 30%.</p>
+    <pre class="code-block">{
+  <span class="key">"schema_version"</span>: <span class="value">"1.0"</span>,
+  <span class="key">"terrain"</span>: {
+    <span class="key">"name"</span>: <span class="value">"Pokémon Yellow — Rota 1"</span>,
+    <span class="key">"min_lvl"</span>: 2,
+    <span class="key">"max_lvl"</span>: 7,
+    <span class="key">"encounter_frequency"</span>: <span class="value">"normal"</span>,
+    <span class="key">"shiny_rate"</span>: null,
+    <span class="key">"pokemon_table"</span>: [
+      {
+        <span class="key">"number"</span>: 16,
+        <span class="key">"rarity"</span>: <span class="value">"common"</span>,
+        <span class="key">"gender"</span>: true,
+        <span class="key">"male_odd"</span>: null,
+        <span class="key">"min_lvl"</span>: 2,
+        <span class="key">"max_lvl"</span>: 7
+      },
+      {
+        <span class="key">"number"</span>: 19,
+        <span class="key">"rarity"</span>: <span class="value">"unusual"</span>,
+        <span class="key">"gender"</span>: true,
+        <span class="key">"male_odd"</span>: null,
+        <span class="key">"min_lvl"</span>: 2,
+        <span class="key">"max_lvl"</span>: 4
+      }
+    ]
+  }
+}</pre>
+    <div class="grid-2">
+      <div class="card"><h3>Para adicionar um Pokémon</h3><p>Copie um bloco inteiro entre <code>{ }</code>, cole antes do fechamento da lista e troque número, raridade e níveis. Lembre-se da vírgula entre os blocos.</p></div>
+      <div class="card gold"><h3>Para criar outra rota</h3><p>Troque o nome, os níveis gerais e toda a lista <code>pokemon_table</code>. Mantenha <code>schema_version</code> como <code>"1.0"</code>.</p></div>
+    </div>
+    <div class="footer"><span>Exemplo completo de terreno</span><span>9</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">8 · Campos do terreno</p>
+    <h2>O que cada campo significa</h2>
+    <table>
+      <thead><tr><th style="width:30%">Campo</th><th style="width:25%">Valor aceito</th><th>Explicação simples</th></tr></thead>
+      <tbody>
+        <tr><td><code>schema_version</code></td><td><code>"1.0"</code></td><td>Versão do formato. Não altere.</td></tr>
+        <tr><td><code>background_image_url</code></td><td>URL, <code>null</code> ou omitido</td><td>Imagem opcional do terreno. Se usada, deve começar com <code>https://</code> ou <code>http://</code>.</td></tr>
+        <tr><td><code>terrain.name</code></td><td>Texto de 1 a 120 caracteres</td><td>Nome exibido no programa. Um nome já existente oferece substituição.</td></tr>
+        <tr><td><code>min_lvl</code></td><td>Inteiro de 0 a 100 ou <code>null</code></td><td>Nível mínimo padrão do terreno.</td></tr>
+        <tr><td><code>max_lvl</code></td><td>Inteiro de 0 a 100 ou <code>null</code></td><td>Nível máximo padrão. Deve ser igual ou maior que o mínimo.</td></tr>
+        <tr><td><code>encounter_frequency</code></td><td>Um dos cinco textos abaixo</td><td>Escolhe qual chance base dos Ajustes será utilizada.</td></tr>
+        <tr><td><code>shiny_rate</code></td><td>Número entre 0 e 1 ou <code>null</code></td><td>Chance própria de Shiny. <code>null</code> usa a chance global.</td></tr>
+        <tr><td><code>pokemon_table</code></td><td>Lista <code>[ ]</code></td><td>Contém um bloco para cada Pokémon possível.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Valores exatos de <code>encounter_frequency</code></h3>
+    <div class="grid-3">
+      <div class="card"><code>uneventful</code><p>Tranquila</p></div>
+      <div class="card"><code>rare</code><p>Rara</p></div>
+      <div class="card"><code>normal</code><p>Normal</p></div>
+      <div class="card"><code>frequent</code><p>Frequente</p></div>
+      <div class="card"><code>eventful</code><p>Agitada</p></div>
+      <div class="card green"><strong>Use inglês</strong><p>O JSON exige os textos da esquerda.</p></div>
+    </div>
+
+    <div class="callout" style="margin-top:5mm"><strong>Percentuais no JSON:</strong> 50% é escrito como <code>0.5</code>. A chance de 1 em 4.096 é <code>0.000244140625</code>. Não escreva <code>50</code> em <code>shiny_rate</code>, pois o limite é 1.</div>
+    <div class="footer"><span>Referência dos campos do terreno</span><span>10</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">9 · Campos dos Pokémon</p>
+    <h2>Montando a <code>pokemon_table</code></h2>
+    <pre class="code-block">{
+  <span class="key">"number"</span>: 25,
+  <span class="key">"rarity"</span>: <span class="value">"rare"</span>,
+  <span class="key">"gender"</span>: true,
+  <span class="key">"male_odd"</span>: 50,
+  <span class="key">"min_lvl"</span>: 4,
+  <span class="key">"max_lvl"</span>: 7
+}</pre>
+    <table>
+      <thead><tr><th>Campo</th><th>Exemplo</th><th>O que controla</th></tr></thead>
+      <tbody>
+        <tr><td><code>number</code></td><td><code>25</code></td><td>Número da National Dex. Pikachu é 25, Pidgey é 16, Rattata é 19.</td></tr>
+        <tr><td><code>rarity</code></td><td><code>"rare"</code></td><td>Grupo de peso: <code>common</code>, <code>unusual</code>, <code>rare</code>, <code>super_rare</code> ou <code>legendary</code>.</td></tr>
+        <tr><td><code>gender</code></td><td><code>true</code></td><td><code>true</code> sorteia sexo conforme a espécie; <code>false</code> desliga esse sorteio para a entrada.</td></tr>
+        <tr><td><code>male_odd</code></td><td><code>50</code> ou <code>null</code></td><td>Percentual de macho. <code>null</code> usa a proporção do catálogo local.</td></tr>
+        <tr><td><code>min_lvl</code></td><td><code>4</code> ou <code>null</code></td><td>Nível mínimo específico. <code>null</code> usa o mínimo do terreno.</td></tr>
+        <tr><td><code>max_lvl</code></td><td><code>7</code> ou <code>null</code></td><td>Nível máximo específico. <code>null</code> usa o máximo do terreno.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="grid-2">
+      <div class="card danger">
+        <h3>Não repita números</h3>
+        <p>Cada National Dex pode aparecer apenas uma vez no mesmo terreno. Duas entradas com <code>"number": 25</code> geram erro de validação.</p>
+      </div>
+      <div class="card green">
+        <h3>Use o catálogo local</h3>
+        <p>O aplicativo conhece 1.025 espécies-base. Se o número não existir no catálogo, a importação é bloqueada.</p>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:5mm"><strong>Forma regional e variações:</strong> o formato atual trabalha pela espécie-base da National Dex. Não invente números para formas alternativas.</div>
+    <div class="footer"><span>Referência dos campos de Pokémon</span><span>11</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">10 · Probabilidade</p>
+    <h2>Como as raridades viram chances</h2>
+    <p class="lead">Primeiro o programa escolhe uma raridade disponível; depois escolhe um Pokémon dentro dela. Os pesos iniciais somam 100 quando todas as cinco categorias estão presentes.</p>
+
+    <table>
+      <thead><tr><th>Raridade no JSON</th><th>Peso inicial</th><th>Referência prática</th></tr></thead>
+      <tbody>
+        <tr><td><code>common</code></td><td>60</td><td>Muito comum — aproximadamente 60% quando há uma entrada em cada categoria.</td></tr>
+        <tr><td><code>unusual</code></td><td>25</td><td>Incomum.</td></tr>
+        <tr><td><code>rare</code></td><td>10</td><td>Raro.</td></tr>
+        <tr><td><code>super_rare</code></td><td>4</td><td>Muito raro.</td></tr>
+        <tr><td><code>legendary</code></td><td>1</td><td>Excepcional; use somente quando fizer sentido para a mesa.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="grid-2">
+      <div class="card gold">
+        <h3>Exemplo da Rota 1</h3>
+        <p>Apenas <code>common</code> e <code>unusual</code> estão presentes.</p>
+        <p><strong>Pidgey:</strong> 60 ÷ (60 + 25) = <strong>70,6%</strong></p>
+        <p><strong>Rattata:</strong> 25 ÷ (60 + 25) = <strong>29,4%</strong></p>
+        <p>Isso aproxima os 70% e 30% do jogo.</p>
+      </div>
+      <div class="card green">
+        <h3>Dois Pokémon na mesma raridade</h3>
+        <p>Se Pidgey e Spearow forem ambos <code>common</code>, eles dividem igualmente o grupo comum.</p>
+        <p>O JSON atual não possui um peso numérico individual por Pokémon.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:6mm">Ordem completa do sorteio</h3>
+      <div class="flow" style="grid-template-columns:1fr auto 1fr auto 1fr auto 1fr">
+      <div>Chance de haver encontro</div><span>→</span><div>Raridade disponível</div><span>→</span><div>Pokémon do grupo</div><span>→</span><div>Nível, sexo, Nature e Shiny</div>
+    </div>
+    <div class="callout"><strong>Quer mudar as proporções?</strong> Altere os pesos na tela Ajustes. Eles são globais e afetam todos os terrenos. Para valores diferentes por rota, escolha as categorias com cuidado.</div>
+    <div class="footer"><span>Entendendo pesos e chances</span><span>12</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">11 · Criando seu terreno</p>
+    <h2>Receita segura, passo a passo</h2>
+    <div class="grid-2">
+      <div>
+        <div class="step"><span class="number">1</span><div><h3>Escolha a fonte</h3><p>Anote espécies, níveis e taxas da rota que deseja adaptar.</p></div></div>
+        <div class="step"><span class="number">2</span><div><h3>Copie um modelo</h3><p>Comece por <code>pokemon-yellow-route-1.json</code>; não comece de uma página vazia.</p></div></div>
+        <div class="step"><span class="number">3</span><div><h3>Troque o nome</h3><p>Use um nome fácil de reconhecer e diferente dos terrenos existentes.</p></div></div>
+        <div class="step"><span class="number">4</span><div><h3>Defina os níveis</h3><p>Use limites gerais e sobrescreva apenas espécies que precisarem.</p></div></div>
+      </div>
+      <div>
+        <div class="step"><span class="number">5</span><div><h3>Converta as raridades</h3><p>Aproxime as taxas usando os cinco pesos da página anterior.</p></div></div>
+        <div class="step"><span class="number">6</span><div><h3>Informe a Dex</h3><p>Use o número da National Dex, não o número de uma Pokédex regional.</p></div></div>
+        <div class="step"><span class="number">7</span><div><h3>Salve como JSON</h3><p>Use UTF-8 e mantenha a extensão <code>.json</code>.</p></div></div>
+        <div class="step"><span class="number">8</span><div><h3>Valide antes da sessão</h3><p>Importe, leia todos os avisos e gere alguns encontros de teste.</p></div></div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:5mm">Modelo mínimo para copiar</h3>
+    <pre class="code-block">{
+  <span class="key">"schema_version"</span>: <span class="value">"1.0"</span>,
+  <span class="key">"terrain"</span>: {
+    <span class="key">"name"</span>: <span class="value">"Nome do meu terreno"</span>,
+    <span class="key">"min_lvl"</span>: 2,
+    <span class="key">"max_lvl"</span>: 5,
+    <span class="key">"encounter_frequency"</span>: <span class="value">"normal"</span>,
+    <span class="key">"shiny_rate"</span>: null,
+    <span class="key">"pokemon_table"</span>: [
+      {
+        <span class="key">"number"</span>: 16,
+        <span class="key">"rarity"</span>: <span class="value">"common"</span>,
+        <span class="key">"gender"</span>: true,
+        <span class="key">"male_odd"</span>: null,
+        <span class="key">"min_lvl"</span>: null,
+        <span class="key">"max_lvl"</span>: null
+      }
+    ]
+  }
+}</pre>
+    <div class="footer"><span>Criando um terreno novo</span><span>13</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">12 · Solução de problemas</p>
+    <h2>Erros comuns no JSON</h2>
+    <div class="error-list">
+      <div class="error-item"><code>conteúdo não é um JSON válido</code><p>Geralmente falta uma vírgula, aspas, chave ou colchete. Compare com o modelo.</p></div>
+      <div class="error-item"><code>schema_version: Invalid input</code><p>Use exatamente <code>"1.0"</code>, incluindo as aspas.</p></div>
+      <div class="error-item"><code>number: Pokémon não existe</code><p>Confira o número da National Dex e não use zero.</p></div>
+      <div class="error-item"><code>está duplicado neste terreno</code><p>Remova a segunda entrada com o mesmo número.</p></div>
+      <div class="error-item"><code>intervalo de nível inválido</code><p>O mínimo ficou maior que o máximo. Corrija os dois valores.</p></div>
+      <div class="error-item"><code>rarity: Invalid option</code><p>Use apenas um dos cinco nomes em inglês mostrados neste guia.</p></div>
+      <div class="error-item"><code>arquivo não aparece no seletor</code><p>Confirme a extensão <code>.json</code> ou <code>.mp3</code> e salve em Downloads.</p></div>
+      <div class="error-item"><code>nenhum Pokémon elegível</code><p>A lista está vazia, os números não existem ou os níveis estão inválidos.</p></div>
+    </div>
+
+    <h3 style="margin-top:6mm">Quando a música não toca</h3>
+    <ul>
+      <li>Confirme que o arquivo realmente é MP3, e não outro formato renomeado.</li>
+      <li>Ative <strong>Reproduzir em encontros</strong>, aumente o volume e salve.</li>
+      <li>Use <strong>Testar</strong> depois que aparecer “MP3 armazenado no aplicativo”.</li>
+      <li>A música de encontro toca somente quando um encontro acontece.</li>
+    </ul>
+
+    <h3>Quando os botões de arquivo não abrem</h3>
+    <p>Instale a versão <strong>0.1.1 ou superior</strong>. Essa versão usa o seletor nativo do Android para JSON e MP3.</p>
+    <div class="callout"><strong>Antes de pedir ajuda:</strong> anote o modelo do aparelho, versão do Android, versão do aplicativo, nome do arquivo e a mensagem completa exibida na tela.</div>
+    <div class="footer"><span>Erros comuns e correções</span><span>14</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">13 · Checklist final</p>
+    <h2>Teste antes da sessão</h2>
+    <div class="grid-2">
+      <div class="card green">
+        <h3>Terreno</h3>
+        <ul class="checklist">
+          <li>O JSON foi importado sem erros.</li>
+          <li>O nome e os níveis estão corretos.</li>
+          <li>Todos os Pokémon esperados aparecem.</li>
+          <li>As raridades fazem sentido.</li>
+          <li>O terreno está selecionado.</li>
+        </ul>
+      </div>
+      <div class="card gold">
+        <h3>Aplicativo</h3>
+        <ul class="checklist">
+          <li>Um percurso consegue gerar encontro.</li>
+          <li>O resultado aparece no histórico.</li>
+          <li>O MP3 toca no botão Testar.</li>
+          <li>Volume e Shiny estão configurados.</li>
+          <li>O aparelho tem bateria para a sessão.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="margin-top:6mm">Segurança no Android</h3>
+    <p>O APK é distribuído de forma privada e não vem da Play Store. Durante a instalação pode ser necessário desativar temporariamente o Bloqueador Automático e permitir instalação pelo Telegram ou navegador. Depois de instalar:</p>
+    <ul>
+      <li>reative o <strong>Bloqueador Automático</strong>;</li>
+      <li>desative <strong>Depuração USB/sem fio</strong> se não estiver usando;</li>
+      <li>remova a permissão “Instalar apps desconhecidos” do aplicativo usado para instalar.</li>
+    </ul>
+
+    <h3>Glossário rápido</h3>
+    <table class="compact"><tbody>
+      <tr><td><strong>JSON</strong></td><td>Arquivo de texto que descreve um terreno.</td><td><strong>National Dex</strong></td><td>Número internacional da espécie.</td></tr>
+      <tr><td><strong>Peso</strong></td><td>Valor relativo usado no sorteio.</td><td><strong>Nature</strong></td><td>Natureza PTU sorteada com duas rolagens d6.</td></tr>
+      <tr><td><strong>Cache</strong></td><td>Cópia local temporária de imagens.</td><td><strong>Shiny</strong></td><td>Variação rara, sorteada somente quando permitida.</td></tr>
+    </tbody></table>
+    <div class="footer"><span>Checklist e segurança</span><span>15</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">Referência</p>
+    <h2>Arquivos, fontes e avisos</h2>
+    <div class="card green">
+      <h3>Arquivos de teste incluídos</h3>
+      <p><code>test-files/pokemon-yellow-route-1.json</code><br />Terreno validado para testar importação e geração.</p>
+      <p><code>test-files/battle-start-test-original.mp3</code><br />Chiptune original de 12 segundos para testar áudio.</p>
+    </div>
+
+    <h3 style="margin-top:6mm">Referências da Rota 1</h3>
+    <ul class="source-list">
+      <li>Serebii Pokéarth — Route 1: <a href="https://www.serebii.net/pokearth/kanto/1st/route1.shtml">serebii.net/pokearth/kanto/1st/route1.shtml</a></li>
+      <li>Bulbapedia — Kanto Route 1: <a href="https://bulbapedia.bulbagarden.net/wiki/Kanto_Route_1">bulbapedia.bulbagarden.net/wiki/Kanto_Route_1</a></li>
+      <li>Catálogo do aplicativo: snapshot local derivado da PokéAPI v2 para desenvolvimento.</li>
+    </ul>
+
+    <h3 style="margin-top:6mm">Sobre o projeto</h3>
+    <p>Este aplicativo é uma ferramenta independente para uso privado/local de um grupo de RPG. Não contém ROMs, músicas extraídas de jogos ou imagens copiadas dos jogos.</p>
+    <p>Pokémon e nomes relacionados pertencem aos respectivos titulares. O projeto não é afiliado, patrocinado ou aprovado pela Nintendo, Creatures Inc. ou The Pokémon Company.</p>
+
+    <div class="card gold" style="margin-top:7mm">
+      <h3>Regra de ouro</h3>
+      <p style="font-size:12pt">Guarde sempre uma cópia do JSON que funcionou. Para criar outro terreno, duplique essa cópia e altere aos poucos, validando antes de usar na sessão.</p>
+    </div>
+
+    <div class="callout" style="margin-top:7mm"><strong>Atualizações:</strong> futuras versões podem ampliar o schema. Enquanto este guia indicar a versão 1.0, mantenha <code>"schema_version": "1.0"</code>.</div>
+    <div class="footer"><span>Fontes e avisos</span><span>16</span></div>
+  </section>
+</body>
+</html>

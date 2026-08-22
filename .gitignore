@@ -1,0 +1,15 @@
+node_modules/
+dist/
+target/
+src-tauri/target/
+src-tauri/gen/
+.catalog-cache/
+.env*.local
+.env.android
+artifacts/
+keystores/
+*.jks
+*.keystore
+*.log
+.DS_Store
+Thumbs.db
