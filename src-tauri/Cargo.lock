@@ -2993,7 +2993,7 @@ dependencies = [
 
 [[package]]
 name = "ptu-encounter-generator"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "rusqlite",
  "serde",

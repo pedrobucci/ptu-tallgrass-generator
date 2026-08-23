@@ -3,7 +3,8 @@ import { BaseDirectory, exists, mkdir, readFile, remove, writeFile, writeTextFil
 import { fetch } from "@tauri-apps/plugin-http";
 import { warn } from "@tauri-apps/plugin-log";
 import { pokemonCatalog } from "./catalog";
-import type { AppSettingsV1, EncounterResult } from "./types";
+import { terrainAsFile } from "./terrain-service";
+import type { AppSettingsV1, EncounterResult, Terrain } from "./types";
 
 const downloads = new Map<string, Promise<string | null>>();
 
@@ -125,5 +126,13 @@ export async function exportSettings(settings: AppSettingsV1): Promise<boolean> 
   const path = await save({ defaultPath: "ptu-encounter-settings.json", filters: [{ name: "Configurações JSON", extensions: ["json"] }] });
   if (!path) return false;
   await writeTextFile(path, `${JSON.stringify({ schema_version: "1.0", exported_at: new Date().toISOString(), settings }, null, 2)}\n`);
+  return true;
+}
+
+export async function exportTerrain(terrain: Terrain): Promise<boolean> {
+  const filename = `${terrain.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase() || "terreno"}.json`;
+  const path = await save({ defaultPath: filename, filters: [{ name: "Terreno JSON", extensions: ["json"] }] });
+  if (!path) return false;
+  await writeTextFile(path, `${JSON.stringify(terrainAsFile(terrain), null, 2)}\n`);
   return true;
 }

@@ -136,8 +136,8 @@
     <div class="cover-copy">
       <p class="eyebrow">Manual para iniciantes</p>
       <h1>Guia do Usuário<br />PTU Encounter Generator</h1>
-      <p class="subtitle">Como importar terrenos, gerar encontros, configurar música e criar seus próprios arquivos JSON — sem precisar saber programar.</p>
-      <span class="cover-badge">Windows + Android · versão 0.1.2</span>
+      <p class="subtitle">Como criar e editar terrenos, gerar encontros, configurar música e trabalhar com arquivos JSON — sem precisar saber programar.</p>
+      <span class="cover-badge">Windows + Android · versão 0.2.0</span>
     </div>
     <div class="cover-meta"><span>Projeto público e não oficial</span><span>Agosto de 2026</span></div>
   </section>
@@ -148,8 +148,8 @@
     <p class="lead">O PTU Encounter Generator sorteia encontros para sessões de Pokémon Tabletop United. Você informa o terreno e a distância percorrida; o programa decide se houve encontro e, quando houver, sorteia Pokémon, nível, sexo, Nature e Shiny.</p>
 
     <div class="flow">
-      <div>1. Criar ou receber um JSON</div><span>→</span>
-      <div>2. Importar o terreno</div><span>→</span>
+      <div>1. Criar ou importar um terreno</div><span>→</span>
+      <div>2. Adicionar os Pokémon</div><span>→</span>
       <div>3. Informar a distância</div><span>→</span>
       <div>4. Percorrer</div><span>→</span>
       <div>5. Ver o encontro</div>
@@ -213,7 +213,7 @@
     <div class="grid-3" style="margin-top:5mm">
       <div class="card"><h3>Início</h3><p>Resumo rápido e atalhos.</p></div>
       <div class="card"><h3>Percorrer</h3><p>Realiza o sorteio do encontro.</p></div>
-      <div class="card"><h3>Terrenos</h3><p>Importa, valida e exclui JSONs.</p></div>
+      <div class="card"><h3>Terrenos</h3><p>Cria, edita, importa, exporta e valida terrenos.</p></div>
       <div class="card"><h3>Histórico</h3><p>Guarda encontros já gerados.</p></div>
       <div class="card"><h3>Ajustes</h3><p>Probabilidades, Shiny e áudio.</p></div>
       <div class="card green"><h3>Dica</h3><p>Comece sempre por <strong>Terrenos</strong>.</p></div>
@@ -223,27 +223,27 @@
 
   <section class="page">
     <p class="eyebrow">2 · Terrenos</p>
-    <h2>Como importar um JSON</h2>
+    <h2>Como criar ou importar um terreno</h2>
     <figure class="shot">
       <img src="images/ui-terrains-desktop.png" alt="Tela Terrenos sem nenhum arquivo importado" />
       <span class="pin" style="left:87%;top:10%">1</span>
       <span class="pin" style="left:60%;top:54%">2</span>
     </figure>
-    <div class="legend"><span><b>1</b>Importar JSON no alto</span><span><b>2</b>Escolher arquivo quando a lista está vazia</span></div>
+    <div class="legend"><span><b>1</b>Novo terreno ou Importar JSON</span><span><b>2</b>Ações quando a lista está vazia</span></div>
 
     <div class="grid-2">
       <div>
-        <div class="step"><span class="number">1</span><div><h3>Abra Terrenos</h3><p>Toque no menu <strong>Terrenos</strong>.</p></div></div>
-        <div class="step"><span class="number">2</span><div><h3>Escolha o arquivo</h3><p>Toque em <strong>Importar JSON</strong> e selecione um arquivo terminado em <code>.json</code>.</p></div></div>
-        <div class="step"><span class="number">3</span><div><h3>Leia a prévia</h3><p>O programa mostra nome, quantidade de Pokémon, avisos e erros.</p></div></div>
+        <div class="step"><span class="number">1</span><div><h3>Abra Terrenos</h3><p>Toque no menu <strong>Terrenos</strong> e depois em <strong>Novo terreno</strong>.</p></div></div>
+        <div class="step"><span class="number">2</span><div><h3>Preencha os dados</h3><p>Informe nome, níveis, frequência, taxa de Shiny e, se quiser, a URL da imagem de fundo.</p></div></div>
+        <div class="step"><span class="number">3</span><div><h3>Adicione Pokémon</h3><p>Busque pelo nome ou número da National Dex, toque em <strong>Adicionar</strong> e ajuste raridade, níveis e gênero.</p></div></div>
       </div>
       <div>
-        <div class="step"><span class="number">4</span><div><h3>Confirme</h3><p>Se não houver erros, toque em <strong>Confirmar importação</strong>.</p></div></div>
-        <div class="step"><span class="number">5</span><div><h3>Selecione o terreno</h3><p>O terreno importado passa a ser o terreno ativo.</p></div></div>
-        <div class="step"><span class="number">6</span><div><h3>Substitua quando necessário</h3><p>Importar outro JSON com o mesmo nome oferece a opção de substituir o anterior.</p></div></div>
+        <div class="step"><span class="number">4</span><div><h3>Salve</h3><p>Erros precisam ser corrigidos. Avisos permitem continuar depois de uma confirmação.</p></div></div>
+        <div class="step"><span class="number">5</span><div><h3>Edite quando quiser</h3><p>Selecione um terreno e toque em <strong>Editar</strong>. Use <strong>Cancelar</strong> para manter os dados anteriores.</p></div></div>
+        <div class="step"><span class="number">6</span><div><h3>Exporte uma cópia</h3><p>Toque em <strong>Exportar JSON</strong>, escolha onde salvar e compartilhe o arquivo normalmente.</p></div></div>
       </div>
     </div>
-    <div class="callout"><strong>Aviso não é erro.</strong> Um terreno simples pode avisar que não possui Pokémon raros ou lendários. Você ainda pode importá-lo. Erros em vermelho precisam ser corrigidos.</div>
+    <div class="callout"><strong>Também é possível importar.</strong> Toque em <strong>Importar JSON</strong>, escolha o arquivo, leia a prévia e confirme. Um aviso não bloqueia a operação; erros em vermelho precisam ser corrigidos.</div>
     <div class="footer"><span>Importando um terreno</span><span>4</span></div>
   </section>
 
