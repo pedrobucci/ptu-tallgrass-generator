@@ -1,7 +1,7 @@
 # PTU Encounter Generator
 
 [![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-16866f.svg)](LICENSE)
-![Versão](https://img.shields.io/badge/vers%C3%A3o-0.1.2-0b3d35.svg)
+![Versão](https://img.shields.io/badge/vers%C3%A3o-0.2.0-0b3d35.svg)
 ![Plataformas](https://img.shields.io/badge/plataformas-Windows%20%7C%20Android-efb120.svg)
 
 Gerador offline de encontros aleatórios para sessões de Pokémon Tabletop United, disponível para Windows e Android. O aplicativo combina terreno, distância percorrida, raridade, nível, gênero, Nature PTU e chance de Shiny em um único sorteio.
@@ -10,7 +10,8 @@ Gerador offline de encontros aleatórios para sessões de Pokémon Tabletop Unit
 
 ## Funcionalidades
 
-- terrenos personalizados importados por arquivos JSON;
+- criação e edição visual de terrenos e suas tabelas de Pokémon;
+- importação e exportação de terrenos em JSON;
 - cálculo de encontro baseado na frequência do terreno e na distância percorrida;
 - sorteio ponderado por raridade e níveis inclusivos;
 - geração de gênero, Nature PTU e Shiny;
@@ -34,13 +35,13 @@ No Android, a instalação do APK pode exigir a permissão temporária para inst
 ## Como usar
 
 1. Abra o aplicativo e acesse **Terrenos**.
-2. Importe um arquivo JSON válido.
-3. Selecione o terreno importado.
+2. Toque em **Novo terreno** para criar pela interface ou importe um JSON válido.
+3. Preencha os dados, busque os Pokémon por nome ou National Dex e salve.
 4. Acesse **Percorrer** e informe a distância.
 5. Toque em **PERCORRER** para verificar e, quando houver, gerar o encontro.
 6. Consulte os resultados anteriores em **Histórico**.
 
-Um terreno pronto para teste está em [`test-files/pokemon-yellow-route-1.json`](test-files/pokemon-yellow-route-1.json). Consulte também o [guia ilustrado em PDF](docs/Guia-do-Usuario-PTU-Encounter-Generator-v0.1.2.pdf); a [versão HTML editável](docs/GUIA_DO_USUARIO.html) pode ser aberta diretamente no navegador.
+Um terreno pronto para teste está em [`test-files/pokemon-yellow-route-1.json`](test-files/pokemon-yellow-route-1.json). Consulte também o [guia ilustrado em PDF](docs/Guia-do-Usuario-PTU-Encounter-Generator-v0.2.0.pdf); a [versão HTML editável](docs/GUIA_DO_USUARIO.html) pode ser aberta diretamente no navegador.
 
 ## Formato dos terrenos
 
