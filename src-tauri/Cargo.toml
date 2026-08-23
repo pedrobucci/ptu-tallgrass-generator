@@ -1,6 +1,6 @@
 [package]
 name = "ptu-encounter-generator"
-version = "0.1.1"
+version = "0.1.2"
 description = "Gerador offline de encontros para Pokémon Tabletop United"
 authors = ["PTU Encounter Generator contributors"]
 edition = "2021"
